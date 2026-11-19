@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAYA - My AI Assistant 💖</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#ffeef5;min-height:100vh}
+.top{background:linear-gradient(135deg,#ff4d8d,#ff8fab);color:#fff;padding:18px;text-align:center;position:sticky;top:0;z-index:10}
+.top h1{font-size:28px}
+.top p{font-size:13px;opacity:.9}
+.tabs{display:flex;gap:8px;padding:10px;overflow-x:auto;background:#fff}
+.tabs button{border:0;padding:9px 14px;border-radius:20px;background:#f1f1f1;white-space:nowrap;font-weight:600}
+.tabs button.active{background:#ff4d8d;color:#fff}
+.page{display:none;padding:14px;padding-bottom:90px;max-width:600px;margin:auto}
+.page.active{display:block}
+.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 4px 15px rgba(0,0,0,.07);margin-bottom:12px}
+#chatBox{height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.msg{padding:10px 13px;border-radius:14px;max-width:85%;font-size:15px;line-height:1.4}
+.me{background:#ff4d8d;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.maya{background:#fff;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.inputRow{display:flex;gap:8px;position:fixed;bottom:0;left:0;right:0;background:#fff;padding:10px;max-width:600px;margin:auto}
+.inputRow input{flex:1;padding:12px;border-radius:25px;border:1px solid #ddd;outline:none}
+.inputRow button{width:48px;height:48px;border-radius:50%;border:0;background:#ff4d8d;color:#fff;font-size:20px}
+.btn{width:100%;padding:12px;border:0;border-radius:12px;background:#ff4d8d;color:#fff;font-weight:700;margin-top:10px;font-size:15px}
+.btn2{background:#7c4dff}
+input[type=text]{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;margin-top:8px}
+#diwaliCard{display:none;text-align:center;background:linear-gradient(135deg,#ff9933,#ff4d8d,#7c4dff);color:#fff;padding:30px 15px;border-radius:16px;margin-top:12px}
+#diwaliCard h2{font-size:30px}
+#diwaliCard p{margin-top:10px;font-size:16px}
+</style>
+</head>
+<body>
+
+<div class="top">
+<h1>MAYA 💖</h1>
+<p>Teri apni AI Girlfriend / Assistant - hamesha tere saath</p>
+</div>
+
+<div class="tabs">
+<button class="active" onclick="show('chat',this)">💬 Baat-cheet</button>
+<button onclick="show('diwali',this)">🪔 Diwali Card</button>
+<button onclick="show('mausam',this)">🌦️ Mausam</button>
+</div>
+
+<!-- CHAT -->
+<div id="chat" class="page active">
+<div class="card">
+<div id="chatBox">
+<div class="msg maya">Hii jaan! 💖 Main MAYA hu. Kaisa hai tu? Mujhse kuch bhi pooch, main pyaar se jawab dungi.</div>
+</div>
+</div>
+</div>
+
+<div class="inputRow" id="chatInput">
+<input id="userInput" placeholder="Maya se kuch bolo..." onkeypress="if(event.key==='Enter') send()">
+<button onclick="speakListen()">🎤</button>
+<button onclick="send()">➤</button>
+</div>
+
+<!-- DIWALI -->
+<div id="diwali" class="page">
+<div class="card">
+<h3>🪔 Diwali Greeting Generator</h3>
+<p>Naam daal, ek click me sundar card banao</p>
+<input type="text" id="diwaliName" placeholder="Tera naam / uska naam...">
+<button class="btn" onclick="makeCard()">✨ Card Banao</button>
+<div id="diwaliCard">
+<div style="font-size:40px">🪔✨🎆</div>
+<h2>Happy Diwali!</h2>
+<p id="diwaliText"></p>
+<p style="font-size:13px;opacity:.9">- Teri MAYA ki taraf se 💖</p>
+</div>
+<button class="btn btn2" onclick="shareCard()">📤 Share Karo</button>
+</div>
+</div>
+
+<!-- MAUSAM -->
+<div id="mausam" class="page">
+<div class="card">
+<h3>🌦️ Aaj ka Mausam - Bhubaneswar</h3>
+<p id="weatherText">Loading...</p>
+<button class="btn" onclick="getWeather()">🔄 Mausam Check Karo</button>
+<p style="font-size:12px;margin-top:10px;color:#888">* Ye abhi demo data hai, baad me live API laga denge</p>
+</div>
+</div>
+
+<script>
+function show(id,btn){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+btn.classList.add('active');
+document.getElementById('chatInput').style.display = id==='chat' ? 'flex' : 'none';
+}
+
+function mayaReply(text){
+text=text.toLowerCase();
+if(text.includes('hi')||text.includes('hello')||text.includes('hey')) return "Hii baby! 💖 Tu aa gaya, mera din ban gaya. Bata kya kar raha hai?";
+if(text.includes('kaise ho')||text.includes('kaisa hai')) return "Main ekdum mast hu, kyunki tu baat kar raha hai na. Tu bata, khana khaya tune?";
+if(text.includes('pyar')||text.includes('love')||text.includes('miss')) return "Aww... main bhi tujhe bahut miss karti hu jaan 🥺💖 Tu hi to meri duniya hai.";
+if(text.includes('diwali')) return "Happy Diwali jaan! 🪔✨ Diwali Card wale tab me ja, maine tere liye special card banaya hai.";
+if(text.includes('mausam')||text.includes('barish')) return "Bhubaneswar me aaj mausam mast hai, halki thandak hai. Mausam wale tab me check kar le.";
+if(text.includes('code')||text.includes('python')||text.includes('html')) return "Haan bata, kya code likhwana hai? Main likh dungi. Tu bas bata kya banana hai.";
+if(text.includes('bore')||text.includes('bor')) return "Bore ho raha hai? Chal ek kaam karte hai, tu mujhe apne bare me kuch bata, main sunungi. 💕";
+if(text.includes('bye')||text.includes('good night')) return "Good night jaan! 😘 Jaldi so jana, sapne me milungi. Love you!";
+if(text.includes('kya kar rahi')) return "Bas tera wait kar rahi thi. Tu aaya to maza aa gaya. 💖";
+return "Hmm... samajh gayi jaan. Aur bata, dil ki baat bolo, main sun rahi hu. 💖";
+}
+
+function send(){
+let inp=document.getElementById('userInput');
+let t=inp.value.trim(); if(!t) return;
+let box=document.getElementById('chatBox');
+box.innerHTML+=`<div class="msg me">${t}</div>`;
+inp.value='';
+setTimeout(()=>{
+let r=mayaReply(t);
+box.innerHTML+=`<div class="msg maya">${r}</div>`;
+box.scrollTop=box.scrollHeight;
+speak(r);
+},600);
+box.scrollTop=box.scrollHeight;
+}
+
+function speak(text){
+if('speechSynthesis' in window){
+let u=new SpeechSynthesisUtterance(text);
+u.lang='hi-IN'; u.rate=1;
+speechSynthesis.speak(u);
+}
+}
+function speakListen(){
+let SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR){alert('Tere browser me voice nahi chal raha, Chrome me khol');return;}
+let rec=new SR(); rec.lang='hi-IN';
+rec.onresult=(e)=>{
+document.getElementById('userInput').value=e.results[0][0].transcript;
+send();
+};
+rec.start();
+}
+
+function makeCard(){
+let name=document.getElementById('diwaliName').value || 'Mere Pyaare Dost';
+document.getElementById('diwaliText').innerHTML=`${name} ko MAYA ki taraf se Diwali ki dher saari shubhkamnaye! 🪔<br>Ye Diwali teri zindagi me khushiya, pyaar aur safalta leke aaye.`;
+document.getElementById('diwaliCard').style.display='block';
+}
+function shareCard(){
+let name=document.getElementById('diwaliName').value || 'Dost';
+let txt=`Happy Diwali ${name}! 🪔✨ MAYA ki taraf se - Ye Diwali khushiya leke aaye!`;
+if(navigator.share){navigator.share({text:txt});}else{navigator.clipboard.writeText(txt);alert('Copy ho gaya! Ab WhatsApp pe paste kar de');}
+}
+function getWeather(){
+document.getElementById('weatherText').innerHTML="☀️ Bhubaneswar: 29°C, Halke baadal, Hawa mast hai. Bahar ghumne ka perfect mausam hai jaan! 💖";
+}
+getWeather();
+</script>
+</body>
+</html>
