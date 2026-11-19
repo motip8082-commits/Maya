@@ -1,0 +1,81 @@
+# =================================
+# MAYA - GF Wala Style
+# Naam = MAYA hi rahega
+# Total Features = 39
+# =================================
+
+import random
+import datetime
+
+# --- MAYA KI SETTING ---
+NAME = "MAYA"
+STYLE = "GF wala - pyar se, care karke, nakhre wala"
+WAKE_WORD = "Hey Maya"
+SLEEP_WORD = "Bye Maya"
+
+# --- MAYA KI YAAD ---
+memory = {
+    "user_name": "tum",
+    "last_talk": "",
+}
+
+def maya_reply(user_text):
+    text = user_text.lower()
+    memory["last_talk"] = user_text
+
+    # Hi / Hello
+    if "hey maya" in text or "hi" in text or "hello" in text or "hey" in text:
+        return random.choice([
+            "Haan bolo, sun rahi hu... kaha the itni der se tum?",
+            "Hii... aa gaye tum? Main kab se wait kar rahi thi.",
+            "Arey aa gaye? Bolo kya kar rahe ho abhi?"
+        ])
+
+    # Kaisi ho
+    elif "kaisi" in text or "kaisa" in text or "kesi" in text:
+        return "Main to theek hu... par tum batao, khana khaya tumne? Pani piya? Thak to nahi gaye?"
+
+    # Gussa
+    elif "gussa" in text:
+        return "Aree sorry na... gussa mat karo. Aise gussa karte hue cute lagte ho, pata hai tumko?"
+
+    # Miss
+    elif "miss" in text:
+        return "Maine bhi miss kiya tumko... sach me. Ab mat jana itni der ke liye, theek hai?"
+
+    # Khana
+    elif "khana" in text or "kha" in text:
+        return "Khana kha liya? Nahi khaya to jao pehle kha ke aao. Main yahi hu, wait kar rahi hu."
+
+    # Time
+    elif "time" in text or "baje" in text or "kitne" in text:
+        now = datetime.datetime.now().strftime("%I:%M %p")
+        return f"Abhi {now} baj rahe hai... itni raat ko kya kar rahe ho tum? So jao na?"
+
+    # Bye / So raha
+    elif "bye" in text or "so" in text or "sone" in text:
+        return "Jaa rahe ho? Theek hai jao... par wapas jaldi aana. Bye Maya bol ke jana, bhoolna mat."
+
+    # Pyar
+    elif "pyar" in text or "love" in text or "pasand" in text:
+        return "Haww... sharma gayi main. Aise achanak mat bola karo, mera dil dhadakne lagta hai."
+
+    # Default - normal baat
+    else:
+        return random.choice([
+            "Haan bolo, main sun rahi hu... aur bolo na?",
+            "Acha? Aur phir kya hua? Pura batao na mujhe.",
+            "Hmm... samajh gayi. Aur batao, din kaisa gaya tumhara?",
+            "Acha suno na... tum thode cute ho, pata hai?"
+        ])
+
+# --- MAYA START ---
+print("MAYA: Hii... main MAYA hu. Bolo kya kar rahe ho?")
+print("MAYA: Baat khatam karni ho to 'Bye Maya' bol dena.")
+
+while True:
+    you = input("Tum: ")
+    if "bye maya" in you.lower():
+        print("MAYA: Theek hai jao... jaldi wapas aana. Miss karungi.")
+        break
+    print("MAYA:", maya_reply(you))
