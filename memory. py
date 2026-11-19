@@ -1,0 +1,52 @@
+# =================================
+# MAYA - MEMORY FILE
+# MAYA sab yaad rakhegi
+# =================================
+
+import json
+import os
+
+MEMORY_FILE = "memory.json"
+
+# --- Pehle se yaad kya hai ---
+def load_memory():
+    if os.path.exists(MEMORY_FILE):
+        with open(MEMORY_FILE, "r") as f:
+            return json.load(f)
+    else:
+        return {
+            "user_name": "tum",
+            "likes": [],
+            "dislikes": [],
+            "last_talk": "",
+            "mood": "",
+            "birthday": "",
+            "favourite_food": "",
+            "favourite_song": ""
+        }
+
+def save_memory(data):
+    with open(MEMORY_FILE, "w") as f:
+        json.dump(data, f, indent=4)
+    print("MAYA ne yaad kar liya...")
+
+# --- Yaad karna ---
+def remember(key, value):
+    memory = load_memory()
+    memory[key] = value
+    save_memory(memory)
+    return f"Haan yaad kar liya, {key} = {value}. Ab nahi bhoolungi."
+
+# --- Yaad kar ke batana ---
+def recall(key):
+    memory = load_memory()
+    value = memory.get(key, "")
+    if value:
+        return f"Tumne bataya tha na, {key} hai {value}."
+    else:
+        return "Ye to tumne abhi bataya hi nahi mujhe. Batao na?"
+
+# --- Test ---
+if __name__ == "__main__":
+    print(remember("user_name", "tum"))
+    print(recall("user_name"))
